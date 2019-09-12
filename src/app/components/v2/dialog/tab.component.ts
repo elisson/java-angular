@@ -19,7 +19,7 @@ export interface IGenericInputTab {
   templateUrl: './tab.component.html'
 })
 export class GenericTabDialogComponent implements OnInit, AfterViewInit {
-  @ViewChild('tabGroup') tabGroup;
+  @ViewChild('tabGroup', { static: true }) tabGroup;
   public buttons: any; // = [<any>{ ngClass: 'btn btn-blue pd-h-8', label: 'Salvar', disabled: true }];
   constructor(
     public dialogRef: MatDialogRef<GenericTabDialogComponent>
