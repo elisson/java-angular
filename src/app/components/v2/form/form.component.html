@@ -1,0 +1,152 @@
+<ng-container *ngIf="draw">
+    <form [ngClass]="formClass" class="flex flex--wrap" autocomplete="off" [formGroup]="formGroup" (ngSubmit)="formGroup.valid && _submit(form)"
+        #form="ngForm">
+        <ng-container *ngFor="let item of forms">
+            <div [ngClass]="item.ngClass || 'col-md-6 col-xs-12'">
+                <ng-container [ngSwitch]="item.type">
+                    <ng-container *ngSwitchCase="'datepicker'">
+                        <mat-form-field [appearance]="appearance" class="w-f">
+                            <mat-label>{{item.label | translate: lang}}</mat-label>
+                            <input matInput (change)="change(item)" (dateChange)="dateChange(item)" [placeholder]="item.placeholder | translate: lang"
+                                [formControlName]="item.formControlName" [matDatepicker]="myDatepicker">
+                            <mat-datepicker-toggle matSuffix [for]="myDatepicker"></mat-datepicker-toggle>
+                            <mat-datepicker #myDatepicker></mat-datepicker>
+                            <mat-hint *ngIf="item.hint">
+                                {{item.hint}}
+                            </mat-hint>
+                            <mat-error *ngIf="showError(item)">
+                                {{getError(item.formControlName) | genericHintControlError: lang}}
+                            </mat-error>
+                        </mat-form-field>
+                    </ng-container>
+                    <ng-container *ngSwitchCase="'select'">
+                        <mat-form-field [appearance]="appearance" class="w-f">
+                            <mat-label>{{item.label | translate: lang}}</mat-label>
+                            <mat-select matInput [placeholder]="item.placeholder | translate: lang" [formControlName]="item.formControlName"
+                                (selectionChange)="selectionChange(item)">
+                                <mat-option *ngFor="let o of item.options" [value]="o.value">
+                                    {{ (o.viewValue || o.value ) | translate: lang }}
+                                </mat-option>
+                            </mat-select>
+                            <mat-hint *ngIf="item.hint">
+                                {{item.hint}}
+                            </mat-hint>
+                            <mat-error *ngIf="showError(item)">
+                                {{getError(item.formControlName) | genericHintControlError: lang}}
+                            </mat-error>
+                        </mat-form-field>
+                    </ng-container>
+                    <ng-container *ngSwitchCase="'autocomplete'">
+                        <mat-form-field [appearance]="appearance" class="w-f">
+                            <mat-label>{{item.label | translate: lang}}</mat-label>
+                            <input autocomplete="off" [matAutocomplete]="auto" matInput [placeholder]="item.placeholder | translate: lang"
+                                [formControlName]="item.formControlName">
+                            <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayWith" (optionSelected)="selectionChange(item)">
+                                <mat-option *ngIf="item.isLoading; else autocompleteOptions">Aguarde...</mat-option>
+                                <ng-template #autocompleteOptions>
+                                    <mat-option *ngFor="let o of item.filteredOptions | async" [value]="o">
+                                        {{ o.viewValue || o.value }}
+                                    </mat-option>
+                                </ng-template>
+                            </mat-autocomplete>
+                            <mat-hint *ngIf="item.hint">
+                                {{item.hint}}
+                            </mat-hint>
+                            <mat-error *ngIf="showError(item)">
+                                {{getError(item.formControlName) | genericHintControlError: lang}}
+                            </mat-error>
+                        </mat-form-field>
+                    </ng-container>
+                    <ng-container *ngSwitchCase="'slide-toggle'">
+                        <section class="w-f">
+                            <mat-slide-toggle color="primary" [formControlName]="item.formControlName" (toggleChange)="change(item)"
+                                [checked]="formGroup.get(item.formControlName).value">
+                                {{item.label | translate: lang}}
+                            </mat-slide-toggle>
+                            <mat-hint *ngIf="!showError(item) && item.hint" class="app-generic-form-hint">
+                                {{item.hint}}
+                            </mat-hint>
+                            <mat-error *ngIf="showError(item)" class="mg-t--16 sm">
+                                {{getError(item.formControlName) | genericHintControlError: lang}}
+                            </mat-error>
+                        </section>
+                    </ng-container>
+                    <ng-container *ngSwitchCase="'checkbox'">
+                        <section class="w-f">
+                            <mat-checkbox color="primary" (change)="change(item)" [formControlName]="item.formControlName">
+                                {{(item.placeholder | translate: lang) + ' '}}
+                            </mat-checkbox>
+                            <mat-hint *ngIf="!showError(item) && item.hint" class="app-generic-form-hint app-generic-form-checkbox">
+                                {{item.hint}}
+                            </mat-hint>
+                            <mat-error *ngIf="showError(item)" class="mg-t--16 sm">
+                                {{getError(item.formControlName) | genericHintControlError: lang}}
+                            </mat-error>
+                        </section>
+                    </ng-container>
+                    <ng-container *ngSwitchCase="'textarea'">
+                        <mat-form-field [appearance]="appearance" class="w-f">
+                            <mat-label>{{item.label | translate: lang}}</mat-label>
+                            <textarea style="resize: none" (change)="change(item)" rows="5" matInput [placeholder]="item.placeholder | translate: lang"
+                                [formControlName]="item.formControlName"></textarea>
+                            <mat-hint *ngIf="item.hint">
+                                {{item.hint}}
+                            </mat-hint>
+                            <mat-error *ngIf="showError(item)">
+                                {{getError(item.formControlName) | genericHintControlError: lang}}
+                            </mat-error>
+                        </mat-form-field>
+                    </ng-container>
+                    <ng-container *ngSwitchCase="'file'">
+                        <mat-form-field [appearance]="appearance" class="w-f">
+                            <mat-label>{{item.label | translate: lang}}</mat-label>
+                            <mat-chip-list #chipList>
+                                <mat-chip *ngFor="let f of item._files; let index=index;" [selectable]="false" [removable]="true"
+                                    (removed)="removeFile(item, index, file)">
+                                    {{f.name}}
+                                    <mat-icon matChipRemove>cancel</mat-icon>
+                                </mat-chip>
+                                <input [matChipInputFor]="chipList" [placeholder]="item.placeholder | translate: lang" readonly>
+                                <mat-icon matSuffix class="fs-18 cp" (click)="selectFile(file, item)">attach_file</mat-icon>
+                            </mat-chip-list>
+                            <!-- hidden matInput end file-->
+                            <input matInput [formControlName]="item.formControlName" style="display: none">
+                            <input #file type='file' style="display: none" [name]="item.formControlName">
+                            <!-- hidden matInput end file-->
+                            <mat-hint *ngIf="!showError(item) && item.hint">
+                                {{item.hint}}
+                            </mat-hint>
+                            <div *ngIf="showError(item)" class="sm mat-error" style="position: absolute;bottom: -15px;">
+                                {{getError(item.formControlName) | genericHintControlError: lang}} {{' ' + item.hint}}
+                            </div>
+                        </mat-form-field>
+                    </ng-container>
+                    <ng-container *ngSwitchDefault>
+                        <mat-form-field [appearance]="appearance" class="w-f">
+                            <mat-label>{{item.label | translate: lang}}</mat-label>
+                            <input [type]="item.type !== 'checkbox' && item.type || 'text'" [textMask]="item.mask ? item.mask : {mask: false}"
+                                (change)="change(item)" matInput [placeholder]="item.placeholder | translate: lang" [formControlName]="item.formControlName">
+
+                            <mat-hint *ngIf="item.hint">
+                                {{item.hint}}
+                            </mat-hint>
+                            <mat-error *ngIf="showError(item)">
+                                {{getError(item.formControlName) | genericHintControlError: lang}}
+                            </mat-error>
+                        </mat-form-field>
+                    </ng-container>
+                </ng-container>
+            </div>
+        </ng-container>
+        <div class="col-md-12" *ngIf="buttons">
+            <div class="row" [ngClass]="actionClass">
+                <div *ngFor=" let b of buttons" [ngClass]="b.parent ? b.parent.ngClass : ''">
+                    <button [type]="b.type || 'button'" (click)="b.onClick && _run(b.onClick)" mat-raised-button [color]="b.color" [ngClass]="b.ngClass"
+                        [disabled]="b.disabled || (b.type === 'submit' && formGroup.invalid)">
+                        {{b.label | translate: lang}}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </form>
+</ng-container>

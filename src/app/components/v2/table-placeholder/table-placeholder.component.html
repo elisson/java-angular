@@ -1,0 +1,8 @@
+<table class="mat-table">
+  <thead>
+    <tr class="mat-header-row">
+      <th *ngFor="let row of labels;" class="mat-header-cell">{{row}}</th>
+    </tr>
+  </thead>
+</table>
+<brza-placeholder pClass="mg-h-25 {{avatar ? 'mg-t-12':''}}" [type]="avatar ? 'avatar': 'lines'" [lines]="[0, 25]"></brza-placeholder>

@@ -1,0 +1,26 @@
+<div>
+  <div class="flex flex--end flex--space-between generic-input-component-header row">
+    <div class="col-md-12">{{data.title || ''}}</div>
+    <button mat-icon-button [mat-dialog-close]="false" class="mg-t--12">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+  <div mat-dialog-content class="a-transition overflow" style="overflow:auto">
+    <mat-tab-group class="w-f generic-input-component" #tabGroup>
+      <ng-container *ngFor="let tab of data.tabs; let index=index">
+        <mat-tab [disabled]="tab.disabled">
+          <ng-template mat-tab-label>
+            <span class="fw-b">{{tab.title || (index + 1) + 'º'}}</span>
+          </ng-template>
+          <app-generic-form (save)="save(tab.save, $event)" #form [buttons]="false" (statusChanges)='change(form, $event)'
+            [forms]="tab.input" formClass="mg-t-35 mg-h-0"></app-generic-form>
+        </mat-tab>
+      </ng-container>
+    </mat-tab-group>
+  </div>
+  <div mat-dialog-actions class="flex--end flex--align-center">
+    <ng-container *ngFor="let b of buttons">
+      <button [disabled]="b.disabled" [ngClass]="b.ngClass" mat-raised-button class="mat-primary" (click)="b.click && _run(b.click, $event)">{{b.label| translate: lang}}</button>
+    </ng-container>
+  </div>
+</div>

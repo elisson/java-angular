@@ -1,0 +1,32 @@
+
+mat-tab-group.generic-input-component > mat-tab-header.mat-tab-header {
+  margin-right: -22px;
+  margin-left: -22px
+}
+  mat-form-field.datetime-local >  .mat-form-field-wrapper{
+      padding-bottom: .88em !important;
+  }
+mat-tab-group.generic-input-component > div > mat-tab-body.mat-tab-body {
+  margin-right: -14px;
+  margin-left: -14px;
+}
+.generic-input-component-header {
+  /* background-color: #673AB7; */
+  /* color: white; */
+  margin: -24px -24px 1px;
+  padding: 14px 0 4px 0;
+  font-size: 1.12em;
+  font-weight: bold;
+}
+
+mat-tab-header.mat-tab-header {
+  margin-right: -22px;
+  margin-left: -22px
+}
+mat-tab-body.mat-tab-body {
+  margin-right: -14px;
+  margin-left: -14px;
+}
+.mat-tab-body-content.ng-trigger.ng-trigger-translateTab{
+  overflow: hidden !important;
+}

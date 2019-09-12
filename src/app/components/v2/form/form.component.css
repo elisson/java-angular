@@ -1,0 +1,17 @@
+app-generic-form{
+  width: 100%;
+}
+mat-hint.app-generic-form-hint{
+  position: absolute;
+  bottom: 3px;
+  left: 16px;
+  font-weight: 400;
+  font-size: 9px;
+}
+mat-hint.app-generic-form-hint.app-generic-form-checkbox{
+  bottom: -14px !important;
+}
+.mat-form-field-subscript-wrapper[ng-reflect-ng-switch]{
+  padding: 0;
+  margin: 2px 2px 2px auto;
+}

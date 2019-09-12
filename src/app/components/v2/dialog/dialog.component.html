@@ -1,0 +1,12 @@
+<div class="flex flex--end flex--space-between generic-input-component-header row">
+    <div class="col-md-12">{{data.title ? data.title : (data.confirm ? 'Confirmação' : '')}}</div>
+    <button mat-icon-button [mat-dialog-close]="false" class="mg-t--12">
+      <mat-icon>close</mat-icon>
+    </button>
+</div>
+<mat-dialog-content class="a-transition overflow pd-t-12" style="overflow:auto" [innerHTML]="data.html | genericSecurityTrustHtml"></mat-dialog-content>
+<mat-dialog-actions class="flex--end row pd-h-10 pd-b-0" *ngIf="data.confirm">
+  <div class="mg-h-6">
+    <button class="mat-warn pd-h-8" mat-raised-button [mat-dialog-close]="true">{{data.confirmText?data.confirmText:'Continuar'}}</button>
+  </div>
+</mat-dialog-actions>

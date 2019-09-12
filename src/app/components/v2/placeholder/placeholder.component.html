@@ -1,0 +1,14 @@
+<div class="animated-background facebook" [ngClass]="pClass"
+ [style.height]="type == 'avatar' ? '24px': height">
+  <ng-container *ngIf="type == 'avatar'; else _lines">
+    <div class="background-masker header-top" style="left:38px;top:8px"></div>
+    <div class="background-masker header-left" style="left: 24px;height: 24px;top:0;width: 14px;"></div>
+    <div class="background-masker header-bottom" style="top: 24px;"></div>
+    <div class="background-masker subheader-bottom"></div>
+    <div class="background-masker content-top"></div>
+  </ng-container>
+  <ng-template #_lines>
+    <div class="background-masker content-first-end" *ngFor="let line of lines; let index=index" style="left:0"
+      [style.top]="line + 'px'"></div>
+  </ng-template>
+</div>
