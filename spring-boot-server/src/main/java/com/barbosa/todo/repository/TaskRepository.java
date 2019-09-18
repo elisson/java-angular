@@ -1,4 +1,4 @@
-package com.barbosa.elissonApp.repository;
+package com.barbosa.todo.repository;
 
 import model.Task;
 import org.springframework.data.repository.CrudRepository;

@@ -1,4 +1,4 @@
-package com.barbosa.elissonApp;
+package com.barbosa.todo;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

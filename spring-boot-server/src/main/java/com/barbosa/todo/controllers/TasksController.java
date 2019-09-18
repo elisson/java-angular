@@ -1,20 +1,18 @@
-package com.barbosa.elissonApp.Tasks;
+package com.barbosa.todo.controllers;
 
 import model.Task;
 import org.springframework.beans.factory.annotation.Autowired;
-import com.barbosa.elissonApp.repository.TaskRepository;
-import org.springframework.http.HttpStatus;
+import com.barbosa.todo.repository.TaskRepository;
 import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin(origins = {"http://localhost:4200", "http://127.0.0.1:4200"})
 @RestController
-public class TasksController {
+@RequestMapping("/tasks")
+public class TasksController extends BaseController{
     @Autowired(required = true)
     private TaskRepository taskRepository;
 
-    @PostMapping("/tasks")
-    @ResponseBody
-    @ResponseStatus(HttpStatus.OK)
+    @PostMapping
     public Task save(@RequestBody Task task
     ) {
         return taskRepository.save(
@@ -22,22 +20,17 @@ public class TasksController {
         );
     }
 
-    @GetMapping("/tasks")
-    @ResponseBody
+    @GetMapping
     public Iterable<Task> all() {
         return taskRepository.findAll();
     }
 
-    @DeleteMapping("/tasks/{id}")
-    @ResponseBody
-    @ResponseStatus(HttpStatus.OK)
+    @DeleteMapping("{id}")
     public void delete(@PathVariable Long id) {
         taskRepository.deleteById(id);
     }
 
-    @PutMapping("/tasks/{id}")
-    @ResponseBody
-    @ResponseStatus(HttpStatus.OK)
+    @PutMapping("{id}")
     public Task update(@PathVariable Long id, @RequestBody Task task) {
         Task t = taskRepository.findById(id).orElse(null);
         t.status = task.status;
